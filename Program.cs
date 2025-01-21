@@ -6,16 +6,10 @@ public enum GameCondition
    Win,
    Loss
 }
-internal class GameContext
+internal class GameContext(IRoom startingRoom)
 {
    public GameCondition Condition { get; set; } = GameCondition.Playing;
-   public IRoom CurrentRoom { get; set; }
-
-    public GameContext(IRoom startingRoom)
-    {
-        CurrentRoom = startingRoom;
-    }
-
+   public IRoom CurrentRoom { get; set; } = startingRoom;
 }
 
 internal class Program
@@ -49,7 +43,7 @@ internal class Program
 
          var userInput = Console.ReadLine();
 
-         if (int.TryParse(userInput, out int result))
+         if (int.TryParse(userInput, out var result))
          {
             if (result >= 1 && result <= actionList.Count)
             {
