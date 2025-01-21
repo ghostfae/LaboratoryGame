@@ -1,19 +1,11 @@
 ﻿namespace LaboratoryGame;
 
-internal class RoomAction 
+internal class RoomAction(string description, Action<RoomAction, GameContext> action)
 {
-   public string Description;
-
-   private Action<RoomAction, GameContext> _action;
-
-   public RoomAction(string description, Action<RoomAction, GameContext> action)
-   {
-      Description = description;
-      _action = action;
-   }
+   public string Description = description;
 
    public void PerformAction(GameContext context) 
    {
-      _action.Invoke(this, context);
+      action.Invoke(this, context);
    }
 }

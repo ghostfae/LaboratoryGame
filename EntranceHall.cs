@@ -13,7 +13,8 @@ internal class EntranceHall : IRoom
    private bool _hasRoomBeenInvestigated = false;
    private bool _hasBookBeenPickedUp = false;
    private bool _canInputPasscode = false;
-   private readonly string _passcode = "4321";
+
+   private const string Passcode = "4321";
    private readonly List<RoomAction> _actionList;
 
 
@@ -116,13 +117,22 @@ internal class EntranceHall : IRoom
    private void OnBookPickup(RoomAction action, GameContext _) 
    {
       Console.WriteLine("You have picked up the notebook.");
-      Console.WriteLine($"It has the numbers '{_passcode}' on the backside of the front cover.");
+      Console.WriteLine($"It has the numbers '{Passcode}' on the backside of the front cover.");
       Console.WriteLine("You don't see anything else of use.");
       Console.WriteLine();
 
       _hasBookBeenPickedUp = true;
 
+      _actionList.Add(new RoomAction("View notebook", OnViewNotebook));
+
       _actionList.Remove(action);
+   }
+
+   private void OnViewNotebook(RoomAction _, GameContext __)
+   {
+      Console.WriteLine($"The numbers '{Passcode}' are scribbled into the front cover.");
+      Console.WriteLine("Otherwise, the notebook has diagrams and notes you can't read.");
+      Console.WriteLine();
    }
 
    private void OnEnterPasscode(RoomAction action, GameContext _) 
@@ -134,7 +144,7 @@ internal class EntranceHall : IRoom
          var userInput = Console.ReadLine();
          Console.WriteLine();
 
-         if(userInput == _passcode) 
+         if(userInput == Passcode) 
          {
             _isDoorLocked = false;
             _actionList.Remove(action);
