@@ -6,23 +6,17 @@ public enum GameCondition
    Win,
    Loss
 }
-internal class GameContext
+internal class GameContext(IRoom startingRoom)
 {
    public GameCondition Condition { get; set; } = GameCondition.Playing;
-   public IRoom CurrentRoom { get; set; }
-
-    public GameContext(IRoom startingRoom)
-    {
-        CurrentRoom = startingRoom;
-    }
-
+   public IRoom CurrentRoom { get; set; } = startingRoom;
 }
 
 internal class Program
 {
    static void Main(string[] args)
    {
-      var context = new GameContext(new EntranceHall());
+      var context = new GameContext(new EndScreen());
 
       while (true)
       {
@@ -39,23 +33,34 @@ internal class Program
 
       while (true)
       {
-         Console.WriteLine("Type the number for the following options:");
-
-         for (int i = 0; i < actionList.Count; i++)
+         if (room is not EndScreen)
          {
-            Console.WriteLine($"{i + 1}. {actionList[i].Description}");
+            Console.WriteLine("Type the number for the following options:");
+
+            for (int i = 0; i < actionList.Count; i++)
+            {
+               Console.WriteLine($"{i + 1}. {actionList[i].Description}");
+            }
+
+
+            var userInput = Console.ReadLine();
+            Console.WriteLine();
+
+            if (int.TryParse(userInput, out var result))
+            {
+               if (result >= 1 && result <= actionList.Count)
+               {
+                  return actionList[result - 1];
+               }
+            }
          }
 
-
-         var userInput = Console.ReadLine();
-
-         if (int.TryParse(userInput, out int result))
+         else
          {
-            if (result >= 1 && result <= actionList.Count)
-            {
-               return actionList[result - 1];
-            }
+            Console.ReadKey();
+            return actionList[0];
          }
       }
    }
 }
+
