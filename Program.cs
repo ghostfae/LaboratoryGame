@@ -16,7 +16,7 @@ internal class Program
 {
    static void Main(string[] args)
    {
-      var context = new GameContext(new EndScreen());
+      var context = new GameContext(new EntranceHall());
 
       while (true)
       {
